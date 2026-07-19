@@ -16,7 +16,7 @@ export async function POST(req) {
     }
     return Response.json({
       ok: true,
-      token: issueToken(trimmed),
+      token: issueToken(trimmed, n),
       remaining: result.remaining,
     });
   } catch (e) {

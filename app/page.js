@@ -404,6 +404,23 @@ export default function Home() {
         }
       }
 
+      // 번역이 통째로 실패했으면 차감했던 장수를 자동으로 되돌려준다
+      if (jobs.length === 0 || failed === jobs.length) {
+        let refundMsg = ' 차감된 장수가 복구되지 않았다면 관리자에게 문의해 주세요.';
+        try {
+          const rr = await fetch('/api/refund', {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ token }),
+          });
+          const rd = await rr.json();
+          if (rr.ok) {
+            refundMsg = ` 차감됐던 ${n}장은 자동으로 돌려드렸어요. 잠시 후 같은 코드로 다시 시도해 주세요.`;
+          }
+        } catch {}
+        throw new Error('번역에 실패했어요.' + refundMsg);
+      }
+
       // 3) 저장 (이 컴퓨터의 브라우저 안에만 저장됩니다)
       const paper = {
         id: Date.now().toString(36),

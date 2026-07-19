@@ -53,6 +53,21 @@ function doPost(e) {
       return respond({ ok: true, remaining: after });
     }
 
+    // 번역이 통째로 실패했을 때 차감분을 되돌린다 (같은 건은 한 번만)
+    if (body.action === 'refund') {
+      const pages = Math.floor(Number(body.pages)) || 0;
+      const refundId = String(body.refundId || '').trim();
+      if (pages < 1 || !refundId) return respond({ error: '환불 요청이 올바르지 않습니다.' });
+      if (alreadyRefunded(refundId)) {
+        return respond({ error: '이미 환불 처리된 건입니다.' });
+      }
+      const after = remaining + pages;
+      codeSheet.getRange(row, 2).setValue(after);
+      codeSheet.getRange(row, 4).setValue(new Date());
+      logRefund(code, pages, after, refundId);
+      return respond({ ok: true, remaining: after });
+    }
+
     return respond({ error: '알 수 없는 요청입니다.' });
   } finally {
     lock.releaseLock();
@@ -89,6 +104,36 @@ function logUsage(code, pages, remainingAfter) {
     sheet.setFrozenRows(1);
   }
   sheet.appendRow([new Date(), code, pages, remainingAfter]);
+}
+
+function getRefundSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName('환불기록');
+  if (!sheet) {
+    sheet = ss.insertSheet('환불기록');
+    sheet.appendRow(['시각', '코드', '돌려준장수', '남은장수', '처리번호']);
+    sheet.setFrozenRows(1);
+  }
+  return sheet;
+}
+
+function alreadyRefunded(refundId) {
+  const sheet = getRefundSheet();
+  const last = sheet.getLastRow();
+  if (last < 2) return false;
+  const values = sheet.getRange(2, 5, last - 1, 1).getValues();
+  for (let i = 0; i < values.length; i++) {
+    if (String(values[i][0]).trim() === refundId) return true;
+  }
+  return false;
+}
+
+function logRefund(code, pages, remainingAfter, refundId) {
+  getRefundSheet().appendRow([new Date(), code, pages, remainingAfter, refundId]);
+  // 사용기록에도 마이너스로 남겨서 흐름을 한눈에 볼 수 있게 한다
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const usage = ss.getSheetByName('사용기록');
+  if (usage) usage.appendRow([new Date(), code, -pages, remainingAfter]);
 }
 
 function respond(obj) {
