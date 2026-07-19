@@ -3,3 +3,5 @@ node_modules
 .env.local
 .env*.local
 .DS_Store
+google-apps-script/Code-붙여넣기용.gs
+설치값-메모.txt
