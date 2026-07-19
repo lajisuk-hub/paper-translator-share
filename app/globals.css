@@ -638,3 +638,25 @@ button {
   color: var(--ink-soft);
   margin: 18px 0 6px;
 }
+
+.kakao-btn {
+  display: inline-block;
+  margin-top: 8px;
+  background: #fee500;
+  color: #191919;
+  font-weight: 700;
+  font-size: 14.5px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.kakao-btn:hover {
+  background: #f5d900;
+}
+
+.pay-alt {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}

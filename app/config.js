@@ -5,8 +5,9 @@
 // 1장(1쪽) 번역 가격 (원)
 export const PRICE_PER_PAGE = 100;
 
-// 입금 계좌 안내 (예: '카카오뱅크 3333-00-0000000 (예금주: 홍길동)')
-export const BANK_INFO = '입금 계좌는 아래 연락처로 문의해 주세요';
+// 입금 계좌 안내
+export const BANK_INFO = '카카오뱅크 3333-07-4066191 (예금주: 라지숙)';
 
-// 입금 후 연락할 곳 (예: '문자 010-0000-0000' 또는 '카카오톡 ID: xxx')
-export const CONTACT_INFO = '관리자에게 문의';
+// 입금 후 연락 수단
+export const KAKAO_LINK = 'https://open.kakao.com/o/s0rTIOEi'; // 카카오톡 상담 링크
+export const CONTACT_PHONE = '문자 010-9230-4025'; // 카카오톡이 어려운 분용

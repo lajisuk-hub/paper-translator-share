@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { PRICE_PER_PAGE, BANK_INFO, CONTACT_INFO } from './config';
+import { PRICE_PER_PAGE, BANK_INFO, KAKAO_LINK, CONTACT_PHONE } from './config';
 
 const LEGACY_KEY = 'paper-translator-papers-v1';
 
@@ -537,7 +537,13 @@ export default function Home() {
             <div className="pay-step">
               <span className="pay-step-num">2</span>
               <div>
-                입금 후 <b>{CONTACT_INFO}</b>로 알려 주시면 이용권 코드를 보내드립니다.
+                입금 후 카카오톡으로 알려 주시면 <b>이용권 코드</b>를 보내드립니다.
+                <div>
+                  <a className="kakao-btn" href={KAKAO_LINK} target="_blank" rel="noreferrer">
+                    💬 카카오톡으로 입금 알리기
+                  </a>
+                </div>
+                <div className="pay-alt">카카오톡이 어려우면 {CONTACT_PHONE}</div>
               </div>
             </div>
             <div className="pay-step">
@@ -574,7 +580,13 @@ export default function Home() {
             </div>
           )}
           {notEnough && (
-            <div className="code-msg">추가 이용이 필요하면 {CONTACT_INFO}로 문의해 주세요.</div>
+            <div className="code-msg">
+              추가 이용이 필요하면{' '}
+              <a href={KAKAO_LINK} target="_blank" rel="noreferrer">
+                카카오톡 상담
+              </a>
+              으로 문의해 주세요.
+            </div>
           )}
 
           <div className="pay-actions">
