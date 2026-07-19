@@ -86,11 +86,13 @@ function getOrCreateCodeSheet() {
 }
 
 function findCodeRow(sheet, code) {
+  // 대문자/소문자가 달라도 같은 코드로 인정한다 (HAPPY123 = happy123)
+  const target = String(code).trim().toUpperCase();
   const last = sheet.getLastRow();
   if (last < 2) return -1;
   const values = sheet.getRange(2, 1, last - 1, 1).getValues();
   for (let i = 0; i < values.length; i++) {
-    if (String(values[i][0]).trim() === code) return i + 2;
+    if (String(values[i][0]).trim().toUpperCase() === target) return i + 2;
   }
   return -1;
 }
